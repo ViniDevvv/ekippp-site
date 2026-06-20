@@ -400,6 +400,26 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
     </a>
   </div>
 
+  <!-- SHA-256 vérification -->
+  <div style="margin-top:20px;max-width:680px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 20px;text-align:left">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span style="color:#f0efff;font-weight:700;font-size:13px">Fichier vérifiable</span>
+    </div>
+    <p style="color:#7070A0;font-size:12px;margin-bottom:10px">Empreinte SHA-256 — vérifie-la après téléchargement :</p>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border-radius:8px;padding:10px 14px">
+      <code id="sha-hash" style="color:#A855F7;font-family:Consolas,monospace;font-size:11px;flex:1;word-break:break-all">4e3f3997c0767837778c18b94cedc49c312db0b776438d0146be7b37d033ac11</code>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('sha-hash').textContent);this.textContent='✓';setTimeout(()=>this.textContent='⎘',1500)" style="background:none;border:none;color:#7070A0;cursor:pointer;font-size:16px;padding:0 4px">⎘</button>
+    </div>
+    <p style="color:#7070A0;font-size:11px;margin-top:10px">
+      ⚠ Windows peut afficher « éditeur inconnu » (SmartScreen) : clique
+      <strong style="color:#A855F7">Informations complémentaires</strong> →
+      <strong style="color:#A855F7">Exécuter quand même</strong>.
+      C'est normal sans certificat payant — l'empreinte ci-dessus prouve que le fichier n'a pas été altéré.
+    </p>
+    <p style="color:#555580;font-size:11px;margin-top:6px">Vérifier dans PowerShell : <code style="color:#7070A0">certutil -hashfile EKIPPP.exe SHA256</code></p>
+  </div>
+
   <div class="stats-row">
     <div class="stat-item"><span class="stat-num"><span id="c1">0</span> Go</span><span class="stat-label">Libérés en moyenne</span></div>
     <div class="stat-item"><span class="stat-num"><span id="c2">0</span> clic</span><span class="stat-label">Pour tout nettoyer</span></div>
