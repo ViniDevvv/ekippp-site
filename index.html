@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>EKIPPP – L'optimiseur FiveM ultime</title>
+<link rel="icon" href="logo.png" type="image/png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -349,13 +350,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
 </head>
 <body>
 
-<div id="mainSite">
-<!-- CANVAS PARTICLES -->
-<canvas id="particles"></canvas>
-
 <!-- CURSOR -->
 <div id="cursor"></div>
 <div id="cursor-dot"></div>
+
+<div id="mainSite">
+<!-- CANVAS PARTICLES -->
+<canvas id="particles"></canvas>
 
 <!-- SCROLL PROGRESS -->
 <div id="progress"></div>
@@ -392,7 +393,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
 
   <div class="hero-btns">
     <a href="https://github.com/ViniDevvv/EKIPPP/releases/latest/download/EKIPPP.exe" class="btn btn-primary btn-xl" download>⬇ Télécharger gratuitement</a>
-    <button onclick="openBuyModal()" class="btn btn-ghost btn-lg" style="border-color:rgba(124,58,237,.4);color:#A855F7">⚡ Activer — 7$</button>
+    <button onclick="openBuyModalSafe()" class="btn btn-ghost btn-lg" style="border-color:rgba(124,58,237,.4);color:#A855F7">⚡ Activer — 7$</button>
     <a href="https://discord.gg/YUKQRUj9Qs" class="btn btn-ghost btn-lg" target="_blank">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
       Discord
@@ -415,7 +416,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
           <div class="m-dot" style="background:#28C840"></div>
         </div>
         <div class="m-logo-area">
-          <div class="m-logo-box">E</div>
+          <img src="logo.png" class="m-logo-box" style="object-fit:cover;padding:0"/>
           <span class="m-logo-text">EKIPPP</span>
           <span class="m-logo-sub">OPTIMISEUR FIVEM</span>
         </div>
@@ -568,7 +569,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
         <li><span class="ck">✓</span> Compatible Windows 10 & 11</li>
         <li><span class="ck">✓</span> Clé reçue instantanément après paiement</li>
       </ul>
-      <button onclick="openBuyModal()" class="price-glow-btn">
+      <button onclick="openBuyModalSafe()" class="price-glow-btn">
         ⚡ Acheter maintenant — 7$
       </button>
       <div class="price-secure">🔒 PayPal · Crypto (SOL) · Livraison via Discord</div>
@@ -603,6 +604,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
       <button class="faq-q">C'est sûr pour mon FiveM et mon PC ?<div class="faq-icon">+</div></button>
       <div class="faq-a"><div class="faq-a-inner">100% sûr. EKIPPP ne modifie que les fichiers cache, logs et mods que tu lui demandes explicitement. Il ne touche pas aux fichiers système Windows, ni aux données de jeu, ni aux fichiers FiveM critiques.</div></div>
     </div>
+    <div class="faq-item reveal delay-5">
+      <button class="faq-q">Windows affiche une alerte de sécurité au lancement — est-ce normal ?<div class="faq-icon">+</div></button>
+      <div class="faq-a"><div class="faq-a-inner">Oui, c'est normal. Windows SmartScreen bloque les .exe sans certificat numérique (certificat coûtant plusieurs centaines d'euros/an). EKIPPP est 100% sûr. Pour le lancer : clique sur <strong style="color:#A855F7">« Informations complémentaires »</strong> puis <strong style="color:#A855F7">« Exécuter quand même »</strong>. C'est tout.</div></div>
+    </div>
   </div>
 </section>
 
@@ -612,7 +617,50 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
     <div class="section-chip" style="margin-bottom:20px">Prêt à commencer ?</div>
     <h2>Ton FiveM mérite<br/><span class="grad">le meilleur.</span></h2>
     <p>Rejoins les joueurs qui ont déjà adopté EKIPPP.<br/>Paiement unique, sans engagement.</p>
-    <button onclick="openBuyModal()" class="btn btn-primary btn-xl">⚡ Obtenir EKIPPP — 7$</button>
+    <button onclick="openBuyModalSafe()" class="btn btn-primary btn-xl">⚡ Obtenir EKIPPP — 7$</button>
+  </div>
+</section>
+
+<!-- ══════ CGV ══════ -->
+<section id="cgv" style="background:var(--bg);padding:80px 6%">
+  <div class="section-head reveal">
+    <div class="section-chip">Légal</div>
+    <h2>Conditions Générales de Vente</h2>
+    <p class="section-sub">En achetant EKIPPP, vous acceptez les conditions suivantes.</p>
+  </div>
+  <div style="max-width:780px;margin:40px auto 0;display:flex;flex-direction:column;gap:28px">
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">1. PRODUIT NUMÉRIQUE — PAS DE REMBOURSEMENT</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">EKIPPP est un logiciel numérique livré instantanément après paiement. Conformément à la nature des biens numériques, <strong style="color:var(--t)">aucun remboursement ne sera accordé</strong> une fois la clé de licence générée et/ou téléchargée. En procédant à l'achat, vous reconnaissez et acceptez cette condition.</p>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">2. LICENCE PERSONNELLE — 1 PC</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">La licence achetée est strictement <strong style="color:var(--t)">personnelle et non transférable</strong>. Elle est liée à un seul appareil. Toute revente, redistribution, partage ou duplication de la clé de licence est interdite et entraînera la révocation immédiate de la licence sans remboursement.</p>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">3. COMPATIBILITÉ ET GARANTIE</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">EKIPPP est compatible <strong style="color:var(--t)">Windows 10 et Windows 11 (64 bits)</strong>. Le logiciel est fourni <strong style="color:var(--t)">"tel quel"</strong>, sans garantie de résultat. Les performances obtenues peuvent varier selon la configuration du PC de l'utilisateur. EKIPPP ne peut être tenu responsable de problèmes liés à une configuration atypique, un antivirus bloquant l'app, ou une installation FiveM corrompue.</p>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">4. ABSENCE D'AFFILIATION</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">EKIPPP est un projet <strong style="color:var(--t)">indépendant</strong>, sans aucune affiliation avec Rockstar Games, Take-Two Interactive, ou le projet FiveM (Cfx.re). Les noms GTA V et FiveM sont des marques déposées de leurs propriétaires respectifs.</p>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">5. PRIX ET PAIEMENT</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">Le prix affiché est en <strong style="color:var(--t)">dollars américains (USD)</strong>. Le paiement est unique, sans abonnement ni frais cachés. Les paiements en cryptomonnaie (SOL) sont définitifs et non remboursables par nature.</p>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px">
+      <h3 style="color:var(--pl);font-size:14px;font-weight:700;letter-spacing:.08em;margin-bottom:12px">6. SUPPORT</h3>
+      <p style="color:var(--tm);font-size:14px;line-height:1.8">Le support est assuré via <strong style="color:var(--t)">Discord</strong> dans les meilleurs délais, sans engagement de délai de réponse. En cas de changement de PC ou de réinstallation Windows, contactez le support Discord pour un transfert de licence gratuit.</p>
+    </div>
+
+    <p style="color:var(--ts);font-size:12px;text-align:center;margin-top:8px">Dernière mise à jour : Juin 2026 · Pour toute question : <a href="https://discord.gg/YUKQRUj9Qs" style="color:var(--pl)">Discord EKIPPP</a></p>
   </div>
 </section>
 
@@ -628,6 +676,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
       <a href="#features">Fonctionnalités</a>
       <a href="#pricing">Tarif</a>
       <a href="#faq">FAQ</a>
+      <a href="#cgv">CGV</a>
     </div>
     <div class="footer-copy">© 2026 EKIPPP. Tous droits réservés.</div>
   </div>
@@ -635,7 +684,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
 </div><!-- end mainSite -->
 
 <script>
-checkStatus();
 // ── CONFIG SUPABASE ────────────────────────────────────────────────
 const SB_URL='https://wrbvzqhnjkzthguvduvq.supabase.co';
 const SB_KEY='sb_publishable_ICroIjLqZJB6W8Hk8bo9RA_dxSU3VnN';
@@ -686,11 +734,21 @@ async function voirMaCle(){
   btn.textContent='Création…';btn.disabled=true;
   try{
     await sbRpc('create_order',{p_order_id:currentOrderId,p_discord_id:id,p_payment_method:selectedMethod});
+    localStorage.setItem('ekippp_order',currentOrderId);
     window.location.href='?order='+currentOrderId;
   }catch(e){
     btn.textContent='Voir ma clé (après validation)';btn.disabled=false;
     document.getElementById('modalErr').textContent='⚠ Erreur réseau, réessaie.';
   }
+}
+function openBuyModalSafe(){
+  const saved=localStorage.getItem('ekippp_order');
+  if(saved){
+    if(confirm('Tu as déjà une commande en cours ('+saved+').\nVoir le statut de ta commande ?')){
+      window.location.href='?order='+saved;return;
+    }
+  }
+  openBuyModal();
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBuyModal()});
 
@@ -727,11 +785,14 @@ async function checkStatus(){
       document.getElementById('spKey').style.display='block';
       document.getElementById('spKeyVal').textContent=data.license_key;
       document.getElementById('spVerifyBtn').style.display='none';
+      localStorage.removeItem('ekippp_order');
     }
   }
   refresh();
   document.getElementById('spVerifyBtn').onclick=refresh;
 }
+
+document.addEventListener('DOMContentLoaded', checkStatus);
 
 // ── PARTICLES ──────────────────────────────────────────────────────
 const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
