@@ -20,8 +20,17 @@ html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden;cursor:none}
 a{text-decoration:none;color:inherit}
 
-#cursor{position:fixed;width:32px;height:32px;border:1.5px solid rgba(168,85,247,.5);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
-#cursor-dot{position:fixed;width:5px;height:5px;background:var(--pl);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cursor{position:fixed;pointer-events:none;z-index:9997;border-radius:50%;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.09) 0%,transparent 65%);
+  transform:translate(-50%,-50%);transition:left .18s ease,top .18s ease}
+#cursor-dot{position:fixed;pointer-events:none;z-index:9999;
+  width:8px;height:8px;border-radius:50%;background:var(--pl);
+  transform:translate(-50%,-50%);box-shadow:0 0 12px var(--pl);
+  transition:left .05s,top .05s}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:9996}
 
 #progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--p),var(--pl));z-index:9000;width:0;transition:width .1s}
 
@@ -62,9 +71,12 @@ canvas#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
 .products{padding:0 6% 120px;position:relative;z-index:1}
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto}
 .prod-card{background:var(--bg3);border:1px solid var(--border);border-radius:24px;padding:40px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:all .35s cubic-bezier(.23,1,.32,1)}
-.prod-card::before{content:'';position:absolute;inset:-1px;border-radius:24px;z-index:-1;opacity:0;transition:.35s}
+.prod-card::before{content:'';position:absolute;inset:-1px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(124,58,237,.3),transparent 60%);
+  opacity:0;transition:.35s;z-index:0}
 .prod-card:hover{transform:translateY(-6px);border-color:rgba(124,58,237,.35);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(124,58,237,.12)}
 .prod-card:hover::before{opacity:1}
+.prod-card>*{position:relative;z-index:1}
 .prod-glow{position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;filter:blur(80px);opacity:.12;pointer-events:none}
 .prod-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:.08em;margin-bottom:20px;width:fit-content}
 .prod-icon{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;border:1px solid rgba(124,58,237,.2)}
@@ -176,7 +188,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
       <div class="prod-badge" style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#10B981">EKIPPP · FiveM</div>
       <div class="prod-icon" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2)">🎮</div>
       <div class="prod-name">EKIPPP</div>
-      <div class="prod-tagline">L'optimiseur FiveM #1 FR. Nettoie, gère et optimise ton installation en quelques secondes.</div>
+      <div class="prod-tagline">Nettoie, gère et organise ton installation FiveM en quelques secondes. Cache, mods, sauvegardes — tout en un.</div>
       <ul class="prod-feats">
         <li><span class="ck">✓</span>Nettoyage cache, logs & crashes en 1 clic</li>
         <li><span class="ck">✓</span>Installation de mods drag & drop</li>

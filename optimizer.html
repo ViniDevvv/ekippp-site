@@ -20,8 +20,17 @@ html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden;cursor:none}
 a{text-decoration:none;color:inherit}
 
-#cursor{position:fixed;width:32px;height:32px;border:1.5px solid rgba(168,85,247,.5);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
-#cursor-dot{position:fixed;width:5px;height:5px;background:var(--pl);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cursor{position:fixed;pointer-events:none;z-index:9997;border-radius:50%;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.09) 0%,transparent 65%);
+  transform:translate(-50%,-50%);transition:left .18s ease,top .18s ease}
+#cursor-dot{position:fixed;pointer-events:none;z-index:9999;
+  width:8px;height:8px;border-radius:50%;background:var(--pl);
+  transform:translate(-50%,-50%);box-shadow:0 0 12px var(--pl);
+  transition:left .05s,top .05s}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:9996}
 #progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--p),var(--pl));z-index:9000;width:0;transition:width .1s}
 
 /* ══════ NAV ══════ */
@@ -235,7 +244,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
     <span class="logo-text">EKIPPP</span>
   </a>
   <div class="nav-links">
-    <a href="index.html" style="color:var(--ts);font-size:13px">← Suite</a>
+    <a href="index.html" style="color:var(--ts);font-size:13px">← Accueil</a>
     <a href="#features">Fonctionnalités</a>
     <a href="#how">Comment ça marche</a>
     <a href="#pricing">Tarif</a>
@@ -312,28 +321,109 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
         </div>
       </div>
       <div class="m-body">
-        <div class="m-sidebar">
-          <div class="m-nav active"><div class="m-nav-pill"></div><span class="m-nav-ico">⊞</span> Tableau de bord</div>
-          <div class="m-nav"><span class="m-nav-ico">🎮</span> Game Booster</div>
-          <div class="m-nav"><span class="m-nav-ico">🌐</span> DNS</div>
-          <div class="m-nav"><span class="m-nav-ico">🔍</span> Pilotes</div>
-          <div class="m-nav"><span class="m-nav-ico">⚙</span> Services</div>
-          <div class="m-nav"><span class="m-nav-ico">💾</span> Stockage</div>
-          <div class="m-nav"><span class="m-nav-ico">🛠</span> Outils</div>
+        <!-- SIDEBAR — calquée sur la vraie app -->
+        <div class="m-sidebar" style="width:148px;overflow:hidden;padding:8px 0">
+          <div style="padding:6px 10px 3px;font-size:7px;font-weight:800;color:#353560;letter-spacing:.1em">PRINCIPAL</div>
+          <div class="m-nav active" style="padding:5px 8px;margin:1px 6px"><div class="m-nav-pill" style="height:14px"></div><span style="font-size:10px;color:#fff;font-weight:700">Dashboard</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Nettoyage</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Démarrage</span></div>
+          <div style="padding:7px 10px 3px;font-size:7px;font-weight:800;color:#353560;letter-spacing:.1em">SYSTÈME</div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Réseau</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Stockage</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Pilotes</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px;color:#F87171">⚠ Problèmes</span></div>
+          <div style="padding:7px 10px 3px;font-size:7px;font-weight:800;color:#353560;letter-spacing:.1em">OPTIMISATION</div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Profils</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Gaming</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Confidentialité</span></div>
+          <div style="padding:7px 10px 3px;font-size:7px;font-weight:800;color:#353560;letter-spacing:.1em">AVANCÉ</div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Sécurité</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Automatisation</span></div>
+          <div class="m-nav" style="padding:5px 8px;margin:1px 6px"><span style="font-size:10px">Désinstalleur</span></div>
         </div>
-        <div class="m-content">
-          <div class="m-title">Tableau de bord</div>
-          <div class="m-sub">État de ton système en temps réel.</div>
-          <div class="m-grid4">
-            <div class="m-card"><div class="m-card-label">CPU</div><div class="m-card-val">12%</div><div class="m-bar-fill" style="width:12%"></div></div>
-            <div class="m-card"><div class="m-card-label">RAM</div><div class="m-card-val">6.2 Go</div><div class="m-bar-fill" style="width:52%"></div></div>
-            <div class="m-card"><div class="m-card-label">GPU</div><div class="m-card-val">8%</div><div class="m-bar-fill" style="width:8%"></div></div>
-            <div class="m-card"><div class="m-card-label">DISQUE</div><div class="m-card-val">Sain</div><div class="m-card-sub">SSD NVMe</div></div>
+
+        <!-- CONTENT — tableau de bord -->
+        <div class="m-content" style="padding:12px 14px;overflow:hidden">
+          <!-- Header -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-size:14px;font-weight:900;color:#fff;line-height:1.1">Tableau de bord</div>
+              <div style="font-size:7.5px;color:#404070;margin-top:2px">Windows 11 Home (Build 26200.8655)</div>
+            </div>
+            <div style="background:rgba(124,58,237,.14);border:1px solid rgba(124,58,237,.28);border-radius:5px;padding:3px 9px;font-size:7.5px;font-weight:700;color:#A855F7;cursor:pointer">↻ Actualiser</div>
           </div>
-          <div class="m-grid3">
-            <div class="m-card"><div class="m-card-label">DNS ACTIF</div><div class="m-card-val" style="font-size:13px">Cloudflare</div><div class="m-card-sub">1.1.1.1</div></div>
-            <div class="m-card"><div class="m-card-label">SERVICES</div><div class="m-card-val" style="font-size:13px">Normal</div><div class="m-card-sub">Non optimisé</div></div>
-            <div class="m-card"><div class="m-card-label">PILOTES</div><div class="m-card-val" style="font-size:13px">2</div><div class="m-card-sub">À vérifier</div></div>
+
+          <!-- Bannière 1 clic -->
+          <div style="background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.18);border-radius:7px;padding:7px 10px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="min-width:0">
+              <div style="font-size:6.5px;font-weight:800;color:#A855F7;letter-spacing:.08em;margin-bottom:2px">OPTIMISATION EN 1 CLIC</div>
+              <div style="font-size:7.5px;color:#505080;line-height:1.4">Lance une optimisation complète — nettoyage, TRIM, TCP, RAM, profil Gaming.</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#7C3AED,#A855F7);border-radius:6px;padding:6px 10px;font-size:7.5px;font-weight:800;color:#fff;flex-shrink:0;text-align:center;line-height:1.4;white-space:nowrap">⚡ Optimiser<br/><span style="font-size:6.5px;font-weight:500;opacity:.85">en 1 clic</span></div>
+          </div>
+
+          <!-- Jauges circulaires (SVG) -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:10px">
+            <!-- CPU 3% violet -->
+            <div style="text-align:center">
+              <div style="font-size:6.5px;font-weight:700;color:#404070;letter-spacing:.06em;margin-bottom:3px">PROCESSEUR</div>
+              <svg width="54" height="54" viewBox="0 0 54 54" style="display:block;margin:0 auto">
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#14142a" stroke-width="4.5"/>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#7C3AED" stroke-width="4.5"
+                  stroke-dasharray="3.96 128" stroke-linecap="round" transform="rotate(-90 27 27)"/>
+                <text x="27" y="31" text-anchor="middle" fill="#fff" font-size="11" font-weight="900" font-family="Inter,sans-serif">3%</text>
+              </svg>
+              <div style="font-size:6.5px;color:#404070;margin-top:2px">i9-14900K</div>
+            </div>
+            <!-- RAM 45% vert -->
+            <div style="text-align:center">
+              <div style="font-size:6.5px;font-weight:700;color:#404070;letter-spacing:.06em;margin-bottom:3px">MÉMOIRE</div>
+              <svg width="54" height="54" viewBox="0 0 54 54" style="display:block;margin:0 auto">
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#14142a" stroke-width="4.5"/>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#10B981" stroke-width="4.5"
+                  stroke-dasharray="59.4 72.3" stroke-linecap="round" transform="rotate(-90 27 27)"/>
+                <text x="27" y="31" text-anchor="middle" fill="#fff" font-size="11" font-weight="900" font-family="Inter,sans-serif">45%</text>
+              </svg>
+              <div style="font-size:6.5px;color:#404070;margin-top:2px">14.1 Go utilisés</div>
+            </div>
+            <!-- Disque 64% orange -->
+            <div style="text-align:center">
+              <div style="font-size:6.5px;font-weight:700;color:#404070;letter-spacing:.06em;margin-bottom:3px">DISQUE C:</div>
+              <svg width="54" height="54" viewBox="0 0 54 54" style="display:block;margin:0 auto">
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#14142a" stroke-width="4.5"/>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#F59E0B" stroke-width="4.5"
+                  stroke-dasharray="84.5 47.2" stroke-linecap="round" transform="rotate(-90 27 27)"/>
+                <text x="27" y="31" text-anchor="middle" fill="#fff" font-size="11" font-weight="900" font-family="Inter,sans-serif">64%</text>
+              </svg>
+              <div style="font-size:6.5px;color:#404070;margin-top:2px">335 Go libre</div>
+            </div>
+            <!-- Réseau cyan -->
+            <div style="text-align:center">
+              <div style="font-size:6.5px;font-weight:700;color:#404070;letter-spacing:.06em;margin-bottom:3px">RÉSEAU</div>
+              <svg width="54" height="54" viewBox="0 0 54 54" style="display:block;margin:0 auto">
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#14142a" stroke-width="4.5"/>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="#06B6D4" stroke-width="4.5"
+                  stroke-dasharray="6.6 125.1" stroke-linecap="round" transform="rotate(-90 27 27)"/>
+                <text x="27" y="29" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="900" font-family="Inter,sans-serif">2 Ko/s</text>
+              </svg>
+              <div style="font-size:6.5px;color:#404070;margin-top:2px">Ping: 5 ms</div>
+            </div>
+          </div>
+
+          <!-- Surveillance temps réel -->
+          <div style="font-size:6.5px;font-weight:800;color:#353560;letter-spacing:.09em;margin-bottom:5px">SURVEILLANCE EN TEMPS RÉEL</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+            <div style="background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.12);border-radius:6px;padding:7px 8px">
+              <div style="font-size:6.5px;font-weight:700;color:#505080;margin-bottom:2px">PROCESSEUR</div>
+              <div style="font-size:16px;font-weight:900;color:#A855F7;line-height:1">3%</div>
+              <div style="font-size:6.5px;color:#3a3a60;margin-top:2px;line-height:1.4">i9-14900K · 24c / 32t<br/>3.2 GHz · Charge: 20%</div>
+            </div>
+            <div style="background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.12);border-radius:6px;padding:7px 8px">
+              <div style="font-size:6.5px;font-weight:700;color:#505080;margin-bottom:2px">MÉMOIRE</div>
+              <div style="font-size:16px;font-weight:900;color:#10B981;line-height:1">45%</div>
+              <div style="font-size:6.5px;color:#3a3a60;margin-top:2px">14.1 Go / 31.7 Go</div>
+              <div style="height:3px;background:#14142a;border-radius:2px;margin-top:5px"><div style="height:3px;width:45%;background:#10B981;border-radius:2px"></div></div>
+            </div>
           </div>
         </div>
       </div>
