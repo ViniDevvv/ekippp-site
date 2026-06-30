@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>404 — Page introuvable | EKIPPP</title>
+<link rel="icon" href="logo.png" type="image/png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#06060F;--p:#7C3AED;--pl:#A855F7;--pa:#C084FC;--t:#F0EFFF;--tm:#C8C8E8;--ts:#9090C0;--border:rgba(255,255,255,.07)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 6%;overflow:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);opacity:.15;pointer-events:none}
+.orb1{width:500px;height:500px;background:var(--p);top:-150px;left:-150px}
+.orb2{width:400px;height:400px;background:var(--pd, #5B21B6);bottom:-100px;right:-100px}
+.wrap{position:relative;z-index:1}
+.num{font-size:clamp(100px,20vw,180px);font-weight:900;line-height:1;background:linear-gradient(135deg,#fff 20%,var(--pa) 60%,var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.04em}
+.title{font-size:clamp(20px,3vw,28px);font-weight:800;margin-top:8px;margin-bottom:16px}
+.sub{font-size:15px;color:var(--ts);max-width:440px;line-height:1.7;margin:0 auto 40px}
+.btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;text-decoration:none;transition:all .25s}
+.btn-p{background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;box-shadow:0 0 30px rgba(124,58,237,.4)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(124,58,237,.6)}
+.btn-g{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--tm)}
+.btn-g:hover{background:rgba(255,255,255,.08);color:var(--t)}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:40px;justify-content:center;text-decoration:none}
+.logo img{width:40px;height:40px;border-radius:10px}
+.logo span{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.02em}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="wrap">
+  <a href="index.html" class="logo"><img src="logo.png" alt="EKIPPP"/><span>EKIPPP</span></a>
+  <div class="num">404</div>
+  <div class="title">Page introuvable</div>
+  <p class="sub">Cette page n'existe pas ou a été déplacée. Retourne à l'accueil ou explore nos apps.</p>
+  <div class="btns">
+    <a href="index.html" class="btn btn-p">← Retour à l'accueil</a>
+    <a href="https://discord.gg/YUKQRUj9Qs" target="_blank" class="btn btn-g">Discord</a>
+  </div>
+</div>
+</body>
+</html>
