@@ -4,7 +4,18 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>EKIPPP — La suite complète pour les joueurs PC</title>
-<meta name="description" content="Deux apps pour les joueurs sérieux : EKIPPP optimise ton FiveM, EKIPPP-OPTIMIZER améliore la vie de ton PC. Paiement unique, mises à jour à vie."/>
+<meta name="description" content="4 apps pour les joueurs PC : EKIPPP FiveM, Optimizer, Straff et Anti-AFK. Optimise ton PC, entraîne tes skills, reste en jeu. 7€ à vie, 2 apps gratuites."/>
+<meta name="keywords" content="EKIPPP, FiveM, optimiseur FiveM, optimizer PC, anti-afk, straff training, jeux PC, gaming France"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="EKIPPP"/>
+<meta property="og:title" content="EKIPPP — La suite complète pour les joueurs PC"/>
+<meta property="og:description" content="4 apps pour les joueurs sérieux : EKIPPP FiveM, Optimizer, Straff et Anti-AFK. Optimise ton PC, entraîne tes skills, reste en jeu."/>
+<meta property="og:image" content="https://ekippp-site.vercel.app/logo.png"/>
+<meta property="og:url" content="https://ekippp-site.vercel.app/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="EKIPPP — La suite complète pour les joueurs PC"/>
+<meta name="twitter:description" content="4 apps pour les joueurs sérieux : FiveM, Optimizer, Straff et Anti-AFK."/>
+<meta name="twitter:image" content="https://ekippp-site.vercel.app/logo.png"/>
 <link rel="icon" href="logo.png" type="image/png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -16,7 +27,7 @@
   --border:rgba(255,255,255,.07);--borderp:rgba(124,58,237,.3)
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-y:scroll;scrollbar-gutter:stable}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden;cursor:none}
 a{text-decoration:none;color:inherit}
 
@@ -286,19 +297,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
 <section class="home-stats reveal">
   <div class="stats-row-home">
     <div class="stat-h">
-      <span class="stat-h-num">4</span>
+      <span class="stat-h-num" data-count="4" data-suffix="">0</span>
       <span class="stat-h-label">Apps disponibles</span>
     </div>
     <div class="stat-h">
-      <span class="stat-h-num">13</span>
+      <span class="stat-h-num" data-count="13" data-suffix="">0</span>
       <span class="stat-h-label">Outils dans l'Optimizer</span>
     </div>
     <div class="stat-h">
-      <span class="stat-h-num">7€</span>
+      <span class="stat-h-num" data-count="7" data-suffix="€">0€</span>
       <span class="stat-h-label">Par app, à vie</span>
     </div>
     <div class="stat-h">
-      <span class="stat-h-num">100%</span>
+      <span class="stat-h-num" data-count="100" data-suffix="%">0%</span>
       <span class="stat-h-label">Windows 10 & 11</span>
     </div>
   </div>
@@ -494,6 +505,27 @@ for(let i=0;i<160;i++)stars.push(mkStar());
 // REVEAL
 const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// COUNTER ANIMATION
+function animateCounter(el){
+  const target=parseInt(el.dataset.count);
+  const suffix=el.dataset.suffix||'';
+  let current=0;
+  const duration=1200;
+  const step=Math.ceil(target/(duration/16));
+  const timer=setInterval(()=>{
+    current=Math.min(current+step,target);
+    el.textContent=current+suffix;
+    if(current>=target)clearInterval(timer);
+  },16);
+}
+const statsObs=new IntersectionObserver(entries=>{entries.forEach(e=>{
+  if(e.isIntersecting){
+    e.target.querySelectorAll('[data-count]').forEach(animateCounter);
+    statsObs.unobserve(e.target);
+  }
+})},{threshold:.5});
+const statsSection=document.querySelector('.home-stats');
+if(statsSection)statsObs.observe(statsSection);
 </script>
 </body>
 </html>
