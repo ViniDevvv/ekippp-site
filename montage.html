@@ -10,12 +10,12 @@
 <meta property="og:site_name" content="EKIPPP"/>
 <meta property="og:title" content="EKIPPP Montage — Logiciel de montage vidéo gaming"/>
 <meta property="og:description" content="Timeline manuelle, transitions, overlays, export haute qualité via FFmpeg. Monte tes clips gaming rapidement."/>
-<meta property="og:image" content="https://ekippp-site.vercel.app/logo.png"/>
+<meta property="og:image" content="https://ekippp-site.vercel.app/montage-preview.png"/>
 <meta property="og:url" content="https://ekippp-site.vercel.app/montage.html"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="EKIPPP Montage — Logiciel de montage vidéo gaming"/>
 <meta name="twitter:description" content="Timeline manuelle, transitions, overlays, export haute qualité via FFmpeg."/>
-<meta name="twitter:image" content="https://ekippp-site.vercel.app/logo.png"/>
+<meta name="twitter:image" content="https://ekippp-site.vercel.app/montage-preview.png"/>
 <meta name="theme-color" content="#7C3AED"/>
 <link rel="icon" href="logo.png" type="image/png"/>
 <link rel="canonical" href="https://ekippp-site.vercel.app/montage.html"/>
@@ -121,6 +121,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
 .faq-item.open .faq-arr{transform:rotate(45deg)}
 .faq-a{color:var(--ts);font-size:14px;line-height:1.8;padding:0 24px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
 .faq-item.open .faq-a{max-height:220px;padding:0 24px 20px}
+.ss-card-app{border-radius:16px;overflow:hidden;border:1px solid rgba(168,85,247,.25);box-shadow:0 0 60px rgba(168,85,247,.12),0 0 120px rgba(168,85,247,.06);transition:transform .25s,box-shadow .25s}
+.ss-card-app:hover{transform:translateY(-6px);box-shadow:0 12px 60px rgba(168,85,247,.3)}
+.ss-card-app img{width:100%;display:block;border-radius:16px}
 </style>
 </head>
 <body>
@@ -208,6 +211,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
       <div class="feat-icon">📦</div>
       <div class="feat-title">Zéro installation</div>
       <div class="feat-desc">Un seul .exe, tout est embarqué (FFmpeg inclus). Aucune dépendance à installer.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW -->
+<section style="padding:80px 6%;text-align:center">
+  <div class="reveal">
+    <div class="section-label">Aperçu</div>
+    <div class="section-title" style="margin-bottom:40px">L'interface de l'app</div>
+  </div>
+  <div class="reveal" style="max-width:900px;margin:0 auto">
+    <div class="ss-card-app">
+      <img src="montage-preview.png" alt="EKIPPP Montage interface — timeline de montage vidéo" loading="lazy"/>
     </div>
   </div>
 </section>
