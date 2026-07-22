@@ -14,13 +14,12 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
                                   namePlaceholder, createButtonLabel, emptyMemberMsg, recipeCardTitle }) {
 
   // État local du panel (recréé à chaque montée, perdu en changeant d'onglet — acceptable).
-  let state = { labs: [], currentLabId: null, currentDate: todayInTz('Europe/Paris'), org: null, membership: null, admin: false, isOwner: false };
+  let state = { labs: [], currentLabId: null, currentDate: todayInTz('Europe/Paris'), org: null, membership: null, admin: false };
 
   async function render(container, ctx) {
     state.org = ctx.org;
     state.membership = ctx.membership;
     state.admin = isAdmin(ctx.membership);
-    state.isOwner = ctx.membership.user_id === ctx.org.owner_id;
 
     const { data: labs, error } = await supabase
       .from('rp_labs').select('id, name, description, output_item_name, output_unit')
@@ -34,7 +33,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
     }
 
     if (state.labs.length === 0) {
-      container.innerHTML = state.isOwner
+      container.innerHTML = state.admin
         ? `<div class="panel-card">
              <h2>${createHeading}</h2>
              <p style="font-size:12px;color:var(--ts);margin-bottom:16px">${createHint}</p>
@@ -43,7 +42,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
              <div class="form-error" id="create-lab-error"></div>
            </div>`
         : `<div class="empty-state">${emptyMemberMsg}</div>`;
-      if (state.isOwner) {
+      if (state.admin) {
         document.getElementById('btn-create-lab').addEventListener('click', async () => {
           const name = document.getElementById('new-lab-name').value.trim();
           const err = document.getElementById('create-lab-error');
@@ -100,7 +99,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
     container.innerHTML = `
       <div class="lab-tabs">
         ${state.labs.map(l => `<button class="lab-tab ${l.id === lab.id ? 'active' : ''}" data-lab-id="${l.id}">${escapeHtml(l.name)}</button>`).join('')}
-        ${state.isOwner ? `<button class="lab-tab" id="btn-open-create-lab">+ Nouveau</button>` : ''}
+        ${state.admin ? `<button class="lab-tab" id="btn-open-create-lab">+ Nouveau</button>` : ''}
       </div>
       <div class="day-nav">
         <button id="btn-prev-day">←</button>
@@ -123,7 +122,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
               <input type="number" id="ing-qty" placeholder="Qté" style="width:80px;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)"/>
               <button class="btn-primary" id="btn-add-ing" style="width:auto;padding:10px 16px">Ajouter</button>
             </div>` : ''}
-          ${state.isOwner ? `<button class="btn-ghost" id="btn-delete-lab" style="width:auto;padding:8px 16px;margin-top:14px;color:var(--red);border-color:rgba(239,68,68,.3)">Supprimer « ${escapeHtml(lab.name)} »</button>` : ''}
+          ${state.admin ? `<button class="btn-ghost" id="btn-delete-lab" style="width:auto;padding:8px 16px;margin-top:14px;color:var(--red);border-color:rgba(239,68,68,.3)">Supprimer « ${escapeHtml(lab.name)} »</button>` : ''}
         </div>
       </div>
       <div class="panel-card">
