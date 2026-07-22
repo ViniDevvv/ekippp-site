@@ -37,9 +37,14 @@ async function init() {
     const { data, error } = await supabase.rpc('rp_redeem_invite_code', { p_code: code });
     btn.disabled = false; btn.textContent = 'Rejoindre';
     if (error) {
-      joinErr.textContent = error.message.includes('already a member')
-        ? 'Tu es déjà membre de cette organisation.'
-        : 'Code invalide ou expiré.';
+      console.error('rp_redeem_invite_code error:', error);
+      if (error.message.includes('already a member')) {
+        joinErr.textContent = 'Tu es déjà membre de cette organisation.';
+      } else if (error.message.includes('invalid or expired code')) {
+        joinErr.textContent = 'Code invalide ou expiré.';
+      } else {
+        joinErr.textContent = 'Erreur : ' + error.message;
+      }
       return;
     }
     const orgId = data?.[0]?.org_id;
