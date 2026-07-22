@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Connexion… — EKIPPP Groupe</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="spinner"></div>
+    <p class="auth-tagline" id="status-text">Connexion en cours…</p>
+  </div>
+</div>
+<script type="module">
+  import { supabase } from './js/supabase-client.js';
+
+  const statusEl = document.getElementById('status-text');
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) window.location.href = 'app.html';
+  });
+
+  // Filet de sécurité : si onAuthStateChange ne s'est pas déclenché après un court délai
+  // (ex: session déjà présente au chargement), on vérifie explicitement.
+  setTimeout(async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      window.location.href = 'app.html';
+    } else {
+      statusEl.textContent = "Échec de la connexion. Réessaie depuis la page d'accueil.";
+      setTimeout(() => window.location.href = 'index.html', 2500);
+    }
+  }, 2500);
+</script>
+</body>
+</html>

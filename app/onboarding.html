@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rejoindre ou créer une organisation — EKIPPP Groupe</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-card" style="max-width:640px;text-align:left">
+    <div class="auth-logo" style="text-align:center">EKIPPP<span> GROUPE</span></div>
+    <p class="auth-tagline" style="text-align:center">Tu n'es membre d'aucune organisation pour l'instant.</p>
+    <div class="onboard-grid">
+      <div class="onboard-card">
+        <h3>Créer une organisation</h3>
+        <p>Tu deviens propriétaire, tu pourras générer des codes d'invitation pour tes membres.</p>
+        <form id="form-create">
+          <div class="field">
+            <label>Nom de l'organisation</label>
+            <input type="text" id="org-name" placeholder="Nom du groupe" maxlength="60" required/>
+          </div>
+          <button type="submit" class="btn-primary">Créer mon organisation</button>
+          <div class="form-error" id="create-error"></div>
+        </form>
+      </div>
+      <div class="onboard-card">
+        <h3>Rejoindre avec un code</h3>
+        <p>Demande le code d'invitation au propriétaire de ton organisation.</p>
+        <form id="form-join">
+          <div class="field">
+            <label>Code d'invitation</label>
+            <input type="text" id="invite-code" placeholder="XXXXXXXX" maxlength="12" style="text-transform:uppercase" required/>
+          </div>
+          <button type="submit" class="btn-primary">Rejoindre</button>
+          <div class="form-error" id="join-error"></div>
+        </form>
+      </div>
+    </div>
+    <button class="btn-logout" id="btn-logout" style="margin-top:24px">Se déconnecter</button>
+  </div>
+</div>
+<script type="module" src="js/onboarding.js"></script>
+</body>
+</html>
