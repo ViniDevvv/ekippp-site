@@ -16,7 +16,7 @@ export function startSessionWatchdog(ctx) {
   setInterval(async () => {
     let memberships;
     try {
-      memberships = await fetchMyMemberships();
+      memberships = await fetchMyMemberships(ctx.membership.user_id);
     } catch {
       return; // erreur réseau transitoire : on retente au prochain tick, pas de faux positif
     }

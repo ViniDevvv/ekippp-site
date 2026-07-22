@@ -110,7 +110,7 @@ async function boot() {
 
   let memberships;
   try {
-    memberships = await fetchMyMemberships();
+    memberships = await fetchMyMemberships(session.user.id);
   } catch (err) {
     root.innerHTML = `<div class="empty-state" style="padding-top:100px">Erreur de chargement : ${err.message}</div>`;
     return;
