@@ -24,10 +24,12 @@ function periodRange(period, tz) {
 async function computeProductionRows(org, category, range) {
   let query = supabase.from('rp_production_log').select('member_id, quantity, unit, lab_id, produced_at').eq('org_id', org.id);
   if (range) query = query.gte('produced_at', range.start.toISOString()).lt('produced_at', range.end.toISOString());
-  const [{ data: logs }, { data: labs }] = await Promise.all([
+  const [{ data: logs, error: logsErr }, { data: labs, error: labsErr }] = await Promise.all([
     query,
     supabase.from('rp_labs').select('id, category').eq('org_id', org.id)
   ]);
+  if (logsErr) throw logsErr;
+  if (labsErr) throw labsErr;
   const categoryByLabId = {};
   (labs ?? []).forEach(l => { categoryByLabId[l.id] = l.category; });
   const filteredLogs = (logs ?? []).filter(l => category === 'all' || categoryByLabId[l.lab_id] === category);
@@ -50,14 +52,16 @@ async function computeProductionRows(org, category, range) {
 async function computeHeistRows(org, range) {
   let query = supabase.from('rp_heist_log').select('id, amount, declared_at').eq('org_id', org.id);
   if (range) query = query.gte('declared_at', range.start.toISOString()).lt('declared_at', range.end.toISOString());
-  const { data: logs } = await query;
+  const { data: logs, error: logsErr } = await query;
+  if (logsErr) throw logsErr;
   const logIds = (logs ?? []).map(l => l.id);
   if (logIds.length === 0) return [];
   const amountByLog = {};
   (logs ?? []).forEach(l => { amountByLog[l.id] = Number(l.amount); });
 
-  const { data: participants } = await supabase.from('rp_heist_log_participants')
+  const { data: participants, error: partErr } = await supabase.from('rp_heist_log_participants')
     .select('heist_log_id, member_id').in('heist_log_id', logIds);
+  if (partErr) throw partErr;
 
   const statsByMember = {};
   (participants ?? []).forEach(p => {
@@ -74,7 +78,8 @@ async function computeHeistRows(org, range) {
 async function computeTransactionRows(org, range) {
   let query = supabase.from('rp_transactions').select('member_id, amount, sold_at').eq('org_id', org.id);
   if (range) query = query.gte('sold_at', range.start.toISOString()).lt('sold_at', range.end.toISOString());
-  const { data: rows } = await query;
+  const { data: rows, error } = await query;
+  if (error) throw error;
   const statsByMember = {};
   (rows ?? []).forEach(r => {
     if (!statsByMember[r.member_id]) statsByMember[r.member_id] = { count: 0, total: 0 };
