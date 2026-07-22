@@ -10,10 +10,12 @@
 <meta property="og:site_name" content="EKIPPP"/>
 <meta property="og:title" content="EKIPPP Groupe — Dashboard pour organisation RP FiveM"/>
 <meta property="og:description" content="Quotas, laboratoire, récolte, ventes, braquages, classement, gestion des membres — tout en temps réel pour ton organisation RP."/>
+<meta property="og:image" content="https://ekippp-site.vercel.app/labo.png"/>
 <meta property="og:url" content="https://ekippp-site.vercel.app/groupe.html"/>
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="EKIPPP Groupe — Dashboard pour organisation RP FiveM"/>
 <meta name="twitter:description" content="Quotas, laboratoire, récolte, ventes, braquages, classement, gestion des membres — tout en temps réel."/>
+<meta name="twitter:image" content="https://ekippp-site.vercel.app/labo.png"/>
 <meta name="theme-color" content="#7C3AED"/>
 <link rel="icon" href="logo.png" type="image/png"/>
 <link rel="canonical" href="https://ekippp-site.vercel.app/groupe.html"/>
@@ -115,6 +117,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
 .faq-item.open .faq-arr{transform:rotate(45deg)}
 .faq-a{color:var(--ts);font-size:14px;line-height:1.8;padding:0 24px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
 .faq-item.open .faq-a{max-height:220px;padding:0 24px 20px}
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1000px;margin:0 auto}
+.ss-card-app{border-radius:16px;overflow:hidden;border:1px solid rgba(168,85,247,.25);box-shadow:0 0 60px rgba(168,85,247,.12),0 0 120px rgba(168,85,247,.06);transition:transform .25s,box-shadow .25s}
+.ss-card-app:hover{transform:translateY(-6px);box-shadow:0 12px 60px rgba(168,85,247,.3)}
+.ss-card-app img{width:100%;display:block}
+.ss-caption{font-size:12px;color:var(--ts);font-weight:700;margin-top:10px;text-align:center}
+@media(max-width:700px){.ss-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -218,6 +226,32 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 6%}
       <div class="feat-icon">⚡</div>
       <div class="feat-title">Temps réel</div>
       <div class="feat-desc">Chaque action se met à jour instantanément pour tous les membres connectés, sans recharger la page.</div>
+    </div>
+  </div>
+</section>
+
+<!-- APERÇU -->
+<section style="padding:0 6% 100px;position:relative;z-index:1;text-align:center">
+  <div class="reveal">
+    <div class="section-label">Aperçu</div>
+    <div class="section-title" style="margin-bottom:40px">L'interface du dashboard</div>
+  </div>
+  <div class="reveal ss-grid">
+    <div>
+      <div class="ss-card-app"><img src="labo.png" alt="EKIPPP Groupe — planning Laboratoire" loading="lazy"/></div>
+      <div class="ss-caption">Laboratoire</div>
+    </div>
+    <div>
+      <div class="ss-card-app"><img src="recolte.png" alt="EKIPPP Groupe — planning Récolte" loading="lazy"/></div>
+      <div class="ss-caption">Récolte</div>
+    </div>
+    <div>
+      <div class="ss-card-app"><img src="transac.png" alt="EKIPPP Groupe — journal des ventes" loading="lazy"/></div>
+      <div class="ss-caption">Transaction</div>
+    </div>
+    <div>
+      <div class="ss-card-app"><img src="braquage.png" alt="EKIPPP Groupe — journal des braquages" loading="lazy"/></div>
+      <div class="ss-caption">Braquages</div>
     </div>
   </div>
 </section>

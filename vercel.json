@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    { "source": "/app", "destination": "/app/", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/app/", "destination": "https://omertaos.vercel.app/index.html" },
-    { "source": "/app/:path*", "destination": "https://omertaos.vercel.app/:path*" }
-  ]
-}
