@@ -124,6 +124,8 @@ canvas#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
 .m-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px}
 .m-sub{font-size:10px;color:var(--ts);margin-bottom:16px}
 .m-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.m-gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:10px}
+.m-gauges svg{width:100%;height:auto}
 .m-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .m-card{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(124,58,237,.03));border:1px solid rgba(124,58,237,.12);border-radius:10px;padding:10px}
 .m-card-label{font-size:8px;font-weight:700;color:var(--ts);letter-spacing:.06em;margin-bottom:4px}
@@ -214,7 +216,7 @@ h2{font-size:clamp(32px,4.5vw,52px);font-weight:900;line-height:1.12;letter-spac
 /* ══════ FOOTER ══════ */
 footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
-.footer-links{display:flex;gap:28px}
+.footer-links{display:flex;gap:28px;flex-wrap:wrap}
 .footer-links a{color:var(--ts);text-decoration:none;font-size:13px;font-weight:600;transition:.2s}
 .footer-links a:hover{color:var(--pl)}
 .footer-copy{font-size:13px;color:var(--ts)}
@@ -243,7 +245,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
   .stat-block{border-right:none;border-bottom:1px solid var(--border)}
   .stats-row{flex-direction:column;background:none;border:none;gap:16px}
   .stat-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-right:1px solid var(--border);border-radius:12px}
-  .m-body{height:220px}
+  .m-body{height:auto}
+  .m-sidebar{display:none}
+  .m-gauges{grid-template-columns:repeat(2,1fr)}
   .footer-inner{flex-direction:column;text-align:center}
   .nav-burger{display:flex}
 }
@@ -412,7 +416,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
           </div>
 
           <!-- Jauges circulaires (SVG) -->
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:10px">
+          <div class="m-gauges">
             <!-- CPU 3% violet -->
             <div style="text-align:center">
               <div style="font-size:6.5px;font-weight:700;color:#404070;letter-spacing:.06em;margin-bottom:3px">PROCESSEUR</div>
@@ -491,7 +495,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
     <h2>L'app en action</h2>
     <p class="section-sub">Interface sombre, claire et pensée pour aller vite.</p>
   </div>
-  <div class="reveal" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1000px;margin:0 auto">
+  <div class="reveal ss-grid">
     <div class="ss-card" onclick="openSS(this)">
       <img src="opt-dashboard.png" alt="Tableau de bord" loading="lazy"/>
       <div class="ss-label">📊 Tableau de bord</div>
@@ -515,10 +519,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
   <img id="ss-lightbox-img" src="" style="max-width:90vw;max-height:88vh;border-radius:12px;box-shadow:0 0 60px rgba(124,58,237,.4)"/>
 </div>
 <style>
+.ss-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1000px;margin:0 auto}
 .ss-card{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);cursor:zoom-in;transition:transform .2s,box-shadow .2s;position:relative}
 .ss-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(124,58,237,.25)}
 .ss-card img{width:100%;height:220px;object-fit:cover;object-position:top;display:block}
 .ss-label{position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#E0E0FF;font-size:13px;font-weight:600;font-family:'Inter',sans-serif}
+@media(max-width:480px){.ss-grid{grid-template-columns:1fr}}
 </style>
 <script>
 function openSS(card){const img=card.querySelector('img');const lb=document.getElementById('ss-lightbox');document.getElementById('ss-lightbox-img').src=img.src;lb.style.display='flex';}
