@@ -39,6 +39,7 @@ nav.scrolled{background:rgba(6,6,15,.92);backdrop-filter:blur(24px);border-botto
 .logo-icon{width:46px;height:46px;border-radius:13px}
 .logo-text{font-size:22px;font-weight:900;letter-spacing:-.02em}
 .nav-links{display:flex;gap:32px}
+.nav-links a{white-space:nowrap}
 .nav-links a{font-size:16px;font-weight:700;color:#C8C8E8;transition:.2s;letter-spacing:-.01em}
 .nav-links a:hover{color:#fff}
 .nav-links a.active{color:var(--acc)}
@@ -47,6 +48,7 @@ nav.scrolled{background:rgba(6,6,15,.92);backdrop-filter:blur(24px);border-botto
 .nav-burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .nav-burger.open span:nth-child(2){opacity:0}
 .nav-burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+@media(max-width:1600px){.nav-links{display:none}.nav-burger{display:flex}}
 .mobile-menu{display:none;position:fixed;inset:0;z-index:999;background:rgba(6,6,15,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:36px}
 .mobile-menu.open{display:flex}
 .mobile-menu a{font-size:22px;font-weight:700;color:#fff;transition:.2s}
