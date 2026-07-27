@@ -50,15 +50,15 @@ body::after{content:'';position:fixed;inset:0;
 #progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--p),var(--pl));z-index:9000;width:0;transition:width .1s}
 
 /* ══════ NAV ══════ */
-nav{position:fixed;top:0;width:100%;z-index:1000;padding:34px 6%;display:flex;align-items:center;gap:40px;background:rgba(6,6,15,.4);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.04);transition:.3s}
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:34px 6%;display:flex;align-items:center;gap:24px;background:rgba(6,6,15,.4);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.04);transition:.3s}
 nav.scrolled{background:rgba(6,6,15,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:24px 6%}
 .logo{display:flex;align-items:center;gap:14px}
 nav .btn-ghost{margin-left:auto}
 .logo-icon{width:46px;height:46px;border-radius:13px}
 .logo-text{font-size:22px;font-weight:900;letter-spacing:-.02em}
-.nav-links{display:flex;gap:32px}
+.nav-links{display:flex;gap:20px}
 .nav-links a{white-space:nowrap}
-.nav-links a{font-size:16px;font-weight:700;color:#C8C8E8;transition:.2s;letter-spacing:-.01em}
+.nav-links a{font-size:14px;font-weight:700;color:#C8C8E8;transition:.2s;letter-spacing:-.01em}
 .nav-links a:hover{color:#fff}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .25s;border:none}
 .btn-primary{background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;box-shadow:0 0 30px rgba(124,58,237,.4)}
@@ -252,7 +252,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 6%}
 .nav-burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .nav-burger.open span:nth-child(2){opacity:0}
 .nav-burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-@media(max-width:1600px){.nav-links{display:none}.nav-burger{display:flex}}
+@media(max-width:1400px){.nav-links{display:none}.nav-burger{display:flex}}
 .mobile-menu{display:none;position:fixed;inset:0;z-index:999;background:rgba(5,5,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:40px}
 .mobile-menu.open{display:flex}
 .mobile-menu a{font-size:22px;font-weight:700;color:var(--t);text-decoration:none;transition:.2s;letter-spacing:-.02em}
