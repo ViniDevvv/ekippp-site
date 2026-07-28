@@ -90,3 +90,10 @@ with check (
       and m.status = 'active'
   )
 );
+
+-- La policy RLS ci-dessus ne suffit pas seule : Postgres verifie d'abord le GRANT de
+-- base sur la table/colonne avant meme d'evaluer les policies. rp_organizations n'a
+-- jamais eu besoin d'UPDATE jusqu'ici (seulement SELECT/DELETE), ce droit n'existait
+-- pas. Limite au strict necessaire : seule la colonne logo_url est concernee, pas le
+-- reste de la ligne (nom, owner_id, is_active, etc.).
+grant update (logo_url) on public.rp_organizations to authenticated;
