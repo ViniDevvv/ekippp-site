@@ -1,5 +1,5 @@
 import { requireSession, logout } from './auth.js';
-import { fetchMyMemberships, resolveCurrentMembership, setStoredOrgId, isAdmin } from './org.js';
+import { fetchMyMemberships, resolveCurrentMembership, setStoredOrgId, isAdmin, buildOrgAvatarHtml } from './org.js';
 import { registerRoute, startRouter } from './router.js';
 import { startRealtime } from './realtime.js';
 import { startSessionWatchdog } from './session-watchdog.js';
@@ -44,16 +44,12 @@ function renderShell(membership, memberships) {
   const orgOptions = memberships.map(m =>
     `<option value="${m.org_id}" ${m.org_id === membership.org_id ? 'selected' : ''}>${escapeHtml(m.rp_organizations.name)}</option>`
   ).join('');
-  const orgAvatarHtml = org.logo_url
-    ? `<img class="org-avatar" src="${escapeHtml(org.logo_url)}" alt="" onerror="this.style.display='none'"/>`
-    : `<div class="org-avatar org-avatar-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`;
-
   root.innerHTML = `
     <div class="app-shell">
       <aside class="sidebar">
         <div class="sidebar-brand">EKIPPP<span> GROUPE</span></div>
         <div class="org-switcher">
-          ${orgAvatarHtml}
+          <span id="org-avatar-slot">${buildOrgAvatarHtml(org)}</span>
           ${memberships.length > 1
             ? `<select id="org-select">${orgOptions}</select>`
             : `<span class="org-name">${escapeHtml(org.name)}</span>`}

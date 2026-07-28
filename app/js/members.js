@@ -26,27 +26,33 @@ const DEFAULT_TIERS = [
   { key: 'lead', label: 'Lead', sort_order: 3 },
 ];
 
-export async function fetchOrgTiers(orgId) {
+// Prend l'organisation entière (pas juste son id) : le flag tiers_seeded permet de
+// distinguer "cette org n'a jamais eu de grades" (0 ligne, tiers_seeded=false → à semer)
+// de "un admin a supprimé tous ses grades exprès" (0 ligne, tiers_seeded=true → ne rien
+// resemer, respecter son choix).
+export async function fetchOrgTiers(org) {
   const { data, error } = await supabase
     .from('rp_org_tiers')
     .select('id, key, label, sort_order')
-    .eq('org_id', orgId)
+    .eq('org_id', org.id)
     .order('sort_order', { ascending: true });
   if (error) throw error;
-  if (data && data.length > 0) return data;
+  if ((data && data.length > 0) || org.tiers_seeded) return data ?? [];
 
   // Organisation créée après la mise en place des grades personnalisables : la migration
   // one-shot ne les a pas semés (elle ne connaissait que les orgs déjà existantes). On les
   // sème ici à la première lecture — échoue silencieusement pour un membre non-admin (RLS
   // bloque l'insert), un admin qui visite Profil/Quotas ensuite refait la même tentative.
   const { error: seedError } = await supabase.from('rp_org_tiers')
-    .insert(DEFAULT_TIERS.map(t => ({ org_id: orgId, ...t })));
+    .insert(DEFAULT_TIERS.map(t => ({ org_id: org.id, ...t })));
   if (seedError) return [];
+  await supabase.from('rp_organizations').update({ tiers_seeded: true }).eq('id', org.id);
+  org.tiers_seeded = true;
 
   const { data: seeded } = await supabase
     .from('rp_org_tiers')
     .select('id, key, label, sort_order')
-    .eq('org_id', orgId)
+    .eq('org_id', org.id)
     .order('sort_order', { ascending: true });
   return seeded ?? [];
 }

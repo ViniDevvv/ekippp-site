@@ -70,7 +70,7 @@ export async function render(container, ctx) {
       .select('id, user_id, role, rp_rank, hierarchy_tier, discord_username, discord_avatar_url, joined_at')
       .eq('org_id', org.id).eq('status', 'active')
       .order('joined_at', { ascending: true }),
-    fetchOrgTiers(org.id)
+    fetchOrgTiers(org)
   ]);
   const tierLabelMap = buildTierLabelMap(tiers);
 

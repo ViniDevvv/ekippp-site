@@ -14,7 +14,7 @@ export async function render(container, ctx) {
   const [{ data: quotas }, members, tiers] = await Promise.all([
     supabase.from('rp_quotas').select('id, tier, member_id, target_quantity, category').eq('org_id', org.id),
     fetchOrgMembers(org.id),
-    fetchOrgTiers(org.id)
+    fetchOrgTiers(org)
   ]);
   const tierLabelMap = buildTierLabelMap(tiers);
 
