@@ -26,7 +26,7 @@ export async function render(container, ctx) {
     </div>
     <div class="panel-card">
       <h2>Nouvelle vente</h2>
-      <div style="display:grid;grid-template-columns:${admin ? '1fr 1fr 1fr 1fr 1fr' : '1fr 1fr 1fr 1fr'};gap:10px;align-items:end">
+      <div class="form-grid">
         ${admin ? `
         <div class="field" style="margin:0"><label>Membre</label>
           <select id="tx-member" style="width:100%;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)">

@@ -70,8 +70,10 @@ function renderShell(membership, memberships) {
           <button class="btn-logout" id="btn-logout">Se déconnecter</button>
         </div>
       </aside>
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
       <div class="main-area">
         <div class="topbar">
+          <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="Ouvrir le menu">☰</button>
           <div>
             <h1 id="topbar-title"></h1>
             <p id="topbar-sub"></p>
@@ -82,6 +84,16 @@ function renderShell(membership, memberships) {
     </div>`;
 
   document.getElementById('btn-logout').addEventListener('click', logout);
+
+  const sidebarEl = document.querySelector('.sidebar');
+  const backdropEl = document.getElementById('sidebar-backdrop');
+  const openSidebar = () => { sidebarEl.classList.add('open'); backdropEl.classList.add('show'); };
+  const closeSidebar = () => { sidebarEl.classList.remove('open'); backdropEl.classList.remove('show'); };
+  document.getElementById('btn-sidebar-toggle').addEventListener('click', () => {
+    sidebarEl.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  backdropEl.addEventListener('click', closeSidebar);
+  sidebarEl.querySelectorAll('.nav-link').forEach(a => a.addEventListener('click', closeSidebar));
 
   const orgSelect = document.getElementById('org-select');
   if (orgSelect) {

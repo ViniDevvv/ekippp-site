@@ -33,7 +33,7 @@ export async function render(container, ctx) {
     ${isOwner ? `
     <div class="panel-card">
       <h2>Nouveau quota</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
+      <div class="form-grid">
         <div class="field" style="margin:0"><label>Cible</label>
           <select id="quota-target" style="width:100%;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)">
             ${Object.entries(TIER_LABELS).map(([key, label]) => `<option value="${key}">${label}</option>`).join('')}

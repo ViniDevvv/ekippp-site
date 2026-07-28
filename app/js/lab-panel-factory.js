@@ -106,7 +106,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
         <div class="day-label">${fmtDateLabel(state.currentDate)}</div>
         <button id="btn-next-day">→</button>
       </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+      <div class="lab-layout">
         <div>
           <div class="slot-grid">${gridHtml}</div>
         </div>
