@@ -79,7 +79,7 @@ export async function render(container, ctx) {
       <h2>Photo de l'organisation</h2>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
         ${org.logo_url
-          ? `<img class="org-logo-preview" src="${escapeHtml(org.logo_url)}" alt=""/>`
+          ? `<img class="org-logo-preview" src="${escapeHtml(org.logo_url)}" alt="" onerror="this.style.display='none'"/>`
           : `<div class="org-logo-preview org-logo-preview-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`}
         <div>
           <input type="file" id="org-logo-input" accept="image/*" style="font-size:12px;color:var(--tm)"/>
@@ -214,7 +214,7 @@ export async function render(container, ctx) {
 
     container.querySelectorAll('[data-tier-delete]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Supprimer ce grade ? Les membres qui l\'ont actuellement le garderont affiché tel quel, sans mise à jour automatique si tu le recrées plus tard.')) return;
+        if (!confirm('Supprimer ce grade ? Les membres et quotas qui le ciblent actuellement garderont ce nom affiché tel quel — il ne se mettra plus à jour automatiquement.')) return;
         const { error } = await supabase.from('rp_org_tiers').delete().eq('id', btn.dataset.tierDelete);
         if (error) { alert('Erreur : ' + error.message); return; }
         render(container, ctx);

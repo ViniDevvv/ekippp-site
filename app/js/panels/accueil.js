@@ -17,7 +17,7 @@ export async function render(container, ctx) {
   const revenue = (txAmounts ?? []).reduce((sum, r) => sum + Number(r.amount), 0);
 
   const bannerHtml = org.logo_url
-    ? `<div class="org-banner-wrap"><img class="org-banner" src="${escapeHtml(org.logo_url)}" alt="Photo de ${escapeHtml(org.name)}"/></div>`
+    ? `<div class="org-banner-wrap"><img class="org-banner" src="${escapeHtml(org.logo_url)}" alt="Photo de ${escapeHtml(org.name)}" onerror="this.parentElement.style.display='none'"/></div>`
     : '';
 
   container.innerHTML = `

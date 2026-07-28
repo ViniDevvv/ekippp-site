@@ -164,7 +164,8 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
         if (!name || isNaN(qty)) return;
         const priceRaw = document.getElementById('ing-price').value;
         const unitPrice = priceRaw === '' ? null : parseFloat(priceRaw);
-        await supabase.from('rp_lab_ingredients').insert({ lab_id: lab.id, item_name: name, quantity: qty, unit_price: isNaN(unitPrice) ? null : unitPrice });
+        if (unitPrice !== null && (isNaN(unitPrice) || unitPrice < 0)) return;
+        await supabase.from('rp_lab_ingredients').insert({ lab_id: lab.id, item_name: name, quantity: qty, unit_price: unitPrice });
         renderFull(container, ctx);
       });
     }

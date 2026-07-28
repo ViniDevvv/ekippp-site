@@ -3,7 +3,7 @@ import { refreshCurrentPanel } from './router.js';
 
 const ORG_ID_TABLES = [
   'rp_members', 'rp_invite_codes', 'rp_labs', 'rp_lab_slots', 'rp_production_log',
-  'rp_quotas', 'rp_transactions',
+  'rp_quotas', 'rp_transactions', 'rp_org_tiers',
   'rp_heist_log', 'rp_heist_log_participants',
 ];
 

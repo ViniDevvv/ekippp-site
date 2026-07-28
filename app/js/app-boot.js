@@ -45,7 +45,7 @@ function renderShell(membership, memberships) {
     `<option value="${m.org_id}" ${m.org_id === membership.org_id ? 'selected' : ''}>${escapeHtml(m.rp_organizations.name)}</option>`
   ).join('');
   const orgAvatarHtml = org.logo_url
-    ? `<img class="org-avatar" src="${escapeHtml(org.logo_url)}" alt=""/>`
+    ? `<img class="org-avatar" src="${escapeHtml(org.logo_url)}" alt="" onerror="this.style.display='none'"/>`
     : `<div class="org-avatar org-avatar-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`;
 
   root.innerHTML = `
