@@ -51,8 +51,11 @@ button{font-family:inherit;cursor:pointer}
 .sidebar{width:236px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 14px}
 .sidebar-brand{font-size:18px;font-weight:900;letter-spacing:-.02em;padding:6px 10px 20px}
 .sidebar-brand span{color:var(--accl)}
-.org-switcher{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:18px;font-size:12px}
-.org-switcher select{width:100%;background:none;border:none;color:var(--t);font-size:13px;font-weight:700;font-family:inherit}
+.org-switcher{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:18px;font-size:12px;display:flex;align-items:center;gap:10px}
+.org-switcher select{width:100%;background:none;border:none;color:var(--t);font-size:13px;font-weight:700;font-family:inherit;flex:1;min-width:0}
+.org-switcher .org-name{color:var(--tm);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.org-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.org-avatar-fallback{display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.18);color:var(--accl);font-weight:900;font-size:13px}
 .nav-group{font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--ts);text-transform:uppercase;margin:16px 10px 8px}
 .nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--tm);margin-bottom:2px;transition:.15s}
 .nav-link:hover{background:rgba(255,255,255,.04);color:var(--t)}
@@ -101,6 +104,12 @@ button{font-family:inherit;cursor:pointer}
 .gate-card .icon{font-size:36px;margin-bottom:14px}
 .gate-card h2{font-size:18px;font-weight:800;margin-bottom:10px}
 .gate-card p{font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:20px}
+
+/* ===== Photo d'organisation ===== */
+.org-banner-wrap{margin-bottom:20px}
+.org-banner{width:100%;max-height:220px;object-fit:cover;border-radius:16px;border:1px solid var(--border);display:block}
+.org-logo-preview{width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.org-logo-preview-fallback{display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.18);color:var(--accl);font-weight:900;font-size:22px}
 
 /* ===== Cards / stats ===== */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}

@@ -27,6 +27,31 @@ function renderMemberActions(m, org, membership) {
     <button class="btn-ghost" data-kick="${m.id}" data-kick-name="${displayName(m)}" style="width:auto;padding:6px 12px;color:var(--red);border-color:rgba(239,68,68,.3)">Exclure</button>`;
 }
 
+const MAX_LOGO_BYTES = 5 * 1024 * 1024;
+
+async function handleLogoUpload(file, org, feedbackEl, inputEl) {
+  feedbackEl.textContent = '';
+  if (!file.type.startsWith('image/')) { feedbackEl.textContent = 'Le fichier doit être une image.'; inputEl.value = ''; return; }
+  if (file.size > MAX_LOGO_BYTES) { feedbackEl.textContent = 'Image trop lourde (5 Mo max).'; inputEl.value = ''; return; }
+
+  inputEl.disabled = true;
+  feedbackEl.textContent = 'Envoi en cours…';
+  feedbackEl.style.color = '';
+
+  const path = `${org.id}/logo`;
+  const { error: upErr } = await supabase.storage.from('org-logos').upload(path, file, { upsert: true, contentType: file.type });
+  if (upErr) { feedbackEl.textContent = 'Erreur : ' + upErr.message; inputEl.disabled = false; return; }
+
+  const { data: pub } = supabase.storage.from('org-logos').getPublicUrl(path);
+  const url = `${pub.publicUrl}?v=${Date.now()}`;
+  const { error: updErr } = await supabase.from('rp_organizations').update({ logo_url: url }).eq('id', org.id);
+  if (updErr) { feedbackEl.textContent = 'Erreur : ' + updErr.message; inputEl.disabled = false; return; }
+
+  feedbackEl.style.color = 'var(--green)';
+  feedbackEl.textContent = 'Photo mise à jour !';
+  setTimeout(() => window.location.reload(), 500);
+}
+
 export async function render(container, ctx) {
   const { org, membership } = ctx;
   const admin = isAdmin(membership);
@@ -37,6 +62,21 @@ export async function render(container, ctx) {
     .select('id, user_id, role, rp_rank, hierarchy_tier, discord_username, discord_avatar_url, joined_at')
     .eq('org_id', org.id).eq('status', 'active')
     .order('joined_at', { ascending: true });
+
+  const logoSectionHtml = admin ? `
+    <div class="panel-card">
+      <h2>Photo de l'organisation</h2>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        ${org.logo_url
+          ? `<img class="org-logo-preview" src="${escapeHtml(org.logo_url)}" alt=""/>`
+          : `<div class="org-logo-preview org-logo-preview-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`}
+        <div>
+          <input type="file" id="org-logo-input" accept="image/*" style="font-size:12px;color:var(--tm)"/>
+          <div style="font-size:11px;color:var(--ts);margin-top:6px">JPG, PNG ou WebP, 5 Mo max.</div>
+        </div>
+      </div>
+      <div class="form-error" id="org-logo-error"></div>
+    </div>` : '';
 
   let invitesHtml = '';
   if (admin) {
@@ -83,6 +123,7 @@ export async function render(container, ctx) {
       </div>
       <div class="form-error" id="rp-rank-error"></div>
     </div>
+    ${logoSectionHtml}
     ${invitesHtml}
     <div class="panel-card">
       <h2>Membres de l'organisation (${members?.length ?? 0})</h2>
@@ -123,6 +164,11 @@ export async function render(container, ctx) {
   });
 
   if (admin) {
+    document.getElementById('org-logo-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleLogoUpload(file, org, document.getElementById('org-logo-error'), e.target);
+    });
+
     document.getElementById('btn-new-invite').addEventListener('click', async (e) => {
       const btn = e.target;
       btn.disabled = true; btn.textContent = 'Génération…';

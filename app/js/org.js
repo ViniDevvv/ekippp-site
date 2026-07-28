@@ -10,7 +10,7 @@ const STORAGE_KEY = 'ekippp_groupe_current_org';
 export async function fetchMyMemberships(userId) {
   const { data, error } = await supabase
     .from('rp_members')
-    .select('id, org_id, user_id, role, rp_rank, discord_username, discord_avatar_url, rp_organizations(id, name, slug, timezone, accent_color, is_active, owner_id)')
+    .select('id, org_id, user_id, role, rp_rank, discord_username, discord_avatar_url, rp_organizations(id, name, slug, timezone, accent_color, is_active, owner_id, logo_url)')
     .eq('status', 'active')
     .eq('user_id', userId);
   if (error) throw error;

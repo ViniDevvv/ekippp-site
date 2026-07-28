@@ -44,15 +44,20 @@ function renderShell(membership, memberships) {
   const orgOptions = memberships.map(m =>
     `<option value="${m.org_id}" ${m.org_id === membership.org_id ? 'selected' : ''}>${escapeHtml(m.rp_organizations.name)}</option>`
   ).join('');
+  const orgAvatarHtml = org.logo_url
+    ? `<img class="org-avatar" src="${escapeHtml(org.logo_url)}" alt=""/>`
+    : `<div class="org-avatar org-avatar-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`;
 
   root.innerHTML = `
     <div class="app-shell">
       <aside class="sidebar">
         <div class="sidebar-brand">EKIPPP<span> GROUPE</span></div>
-        ${memberships.length > 1 ? `
-          <div class="org-switcher">
-            <select id="org-select">${orgOptions}</select>
-          </div>` : `<div class="org-switcher" style="color:var(--tm);font-weight:700">${escapeHtml(org.name)}</div>`}
+        <div class="org-switcher">
+          ${orgAvatarHtml}
+          ${memberships.length > 1
+            ? `<select id="org-select">${orgOptions}</select>`
+            : `<span class="org-name">${escapeHtml(org.name)}</span>`}
+        </div>
         <div class="nav-group">Navigation</div>
         ${NAV_ITEMS.map(item => `
           <a href="#${item.hash}" class="nav-link ${item.enabled ? '' : 'soon'}" data-route="${item.hash}">
