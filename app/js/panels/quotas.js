@@ -1,5 +1,6 @@
 import { supabase } from '../supabase-client.js';
-import { fetchOrgMembers, displayName, TIER_LABELS } from '../members.js';
+import { fetchOrgMembers, displayName, fetchOrgTiers, buildTierLabelMap } from '../members.js';
+import { escapeHtml } from '../format.js';
 
 export const title = 'Quotas Hebdo';
 export const subtitle = 'Objectifs de production attendus';
@@ -10,10 +11,12 @@ export async function render(container, ctx) {
   const { org, membership } = ctx;
   const isOwner = membership.user_id === org.owner_id;
 
-  const [{ data: quotas }, members] = await Promise.all([
+  const [{ data: quotas }, members, tiers] = await Promise.all([
     supabase.from('rp_quotas').select('id, tier, member_id, target_quantity, category').eq('org_id', org.id),
-    fetchOrgMembers(org.id)
+    fetchOrgMembers(org.id),
+    fetchOrgTiers(org)
   ]);
+  const tierLabelMap = buildTierLabelMap(tiers);
 
   // Tableau statique de référence — pas de suivi de progression, juste "qui doit produire quoi".
   // Regroupé par cible : une même cible (ex: Gradé) peut avoir plusieurs objectifs par
@@ -22,7 +25,7 @@ export async function render(container, ctx) {
   (quotas ?? []).forEach(q => {
     const key = q.member_id ? `member:${q.member_id}` : `tier:${q.tier}`;
     if (!groups[key]) {
-      const name = q.member_id ? displayName(members.find(m => m.user_id === q.member_id)) : (TIER_LABELS[q.tier] ?? q.tier ?? '—');
+      const name = q.member_id ? displayName(members.find(m => m.user_id === q.member_id)) : escapeHtml(tierLabelMap[q.tier] ?? q.tier ?? '—');
       groups[key] = { name, items: [] };
     }
     groups[key].items.push({ id: q.id, categoryLabel: CATEGORY_LABELS[q.category] ?? 'Tout', target: q.target_quantity });
@@ -33,10 +36,10 @@ export async function render(container, ctx) {
     ${isOwner ? `
     <div class="panel-card">
       <h2>Nouveau quota</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
+      <div class="form-grid">
         <div class="field" style="margin:0"><label>Cible</label>
           <select id="quota-target" style="width:100%;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)">
-            ${Object.entries(TIER_LABELS).map(([key, label]) => `<option value="${key}">${label}</option>`).join('')}
+            ${tiers.map(t => `<option value="${escapeHtml(t.key)}">${escapeHtml(t.label)}</option>`).join('')}
           </select>
         </div>
         <div class="field" style="margin:0"><label>Catégorie</label>

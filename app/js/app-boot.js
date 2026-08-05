@@ -1,5 +1,5 @@
 import { requireSession, logout } from './auth.js';
-import { fetchMyMemberships, resolveCurrentMembership, setStoredOrgId, isAdmin } from './org.js';
+import { fetchMyMemberships, resolveCurrentMembership, setStoredOrgId, isAdmin, buildOrgAvatarHtml } from './org.js';
 import { registerRoute, startRouter } from './router.js';
 import { startRealtime } from './realtime.js';
 import { startSessionWatchdog } from './session-watchdog.js';
@@ -44,15 +44,16 @@ function renderShell(membership, memberships) {
   const orgOptions = memberships.map(m =>
     `<option value="${m.org_id}" ${m.org_id === membership.org_id ? 'selected' : ''}>${escapeHtml(m.rp_organizations.name)}</option>`
   ).join('');
-
   root.innerHTML = `
     <div class="app-shell">
       <aside class="sidebar">
         <div class="sidebar-brand">EKIPPP<span> GROUPE</span></div>
-        ${memberships.length > 1 ? `
-          <div class="org-switcher">
-            <select id="org-select">${orgOptions}</select>
-          </div>` : `<div class="org-switcher" style="color:var(--tm);font-weight:700">${escapeHtml(org.name)}</div>`}
+        <div class="org-switcher">
+          <span id="org-avatar-slot">${buildOrgAvatarHtml(org)}</span>
+          ${memberships.length > 1
+            ? `<select id="org-select">${orgOptions}</select>`
+            : `<span class="org-name">${escapeHtml(org.name)}</span>`}
+        </div>
         <div class="nav-group">Navigation</div>
         ${NAV_ITEMS.map(item => `
           <a href="#${item.hash}" class="nav-link ${item.enabled ? '' : 'soon'}" data-route="${item.hash}">
@@ -70,8 +71,10 @@ function renderShell(membership, memberships) {
           <button class="btn-logout" id="btn-logout">Se déconnecter</button>
         </div>
       </aside>
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
       <div class="main-area">
         <div class="topbar">
+          <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="Ouvrir le menu">☰</button>
           <div>
             <h1 id="topbar-title"></h1>
             <p id="topbar-sub"></p>
@@ -82,6 +85,16 @@ function renderShell(membership, memberships) {
     </div>`;
 
   document.getElementById('btn-logout').addEventListener('click', logout);
+
+  const sidebarEl = document.querySelector('.sidebar');
+  const backdropEl = document.getElementById('sidebar-backdrop');
+  const openSidebar = () => { sidebarEl.classList.add('open'); backdropEl.classList.add('show'); };
+  const closeSidebar = () => { sidebarEl.classList.remove('open'); backdropEl.classList.remove('show'); };
+  document.getElementById('btn-sidebar-toggle').addEventListener('click', () => {
+    sidebarEl.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  backdropEl.addEventListener('click', closeSidebar);
+  sidebarEl.querySelectorAll('.nav-link').forEach(a => a.addEventListener('click', closeSidebar));
 
   const orgSelect = document.getElementById('org-select');
   if (orgSelect) {

@@ -1,7 +1,15 @@
 import { supabase } from '../supabase-client.js';
 import { isAdmin } from '../org.js';
-import { displayName, TIER_LABELS } from '../members.js';
+import { displayName, fetchOrgTiers, buildTierLabelMap } from '../members.js';
 import { escapeHtml } from '../format.js';
+
+function slugifyTierKey(label) {
+  return label.trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 40) || 'grade';
+}
 
 export const title = 'Mon Profil';
 export const subtitle = 'Tes informations et la gestion des membres';
@@ -27,16 +35,78 @@ function renderMemberActions(m, org, membership) {
     <button class="btn-ghost" data-kick="${m.id}" data-kick-name="${displayName(m)}" style="width:auto;padding:6px 12px;color:var(--red);border-color:rgba(239,68,68,.3)">Exclure</button>`;
 }
 
+const MAX_LOGO_BYTES = 5 * 1024 * 1024;
+
+async function handleLogoUpload(file, org, feedbackEl, inputEl) {
+  feedbackEl.textContent = '';
+  if (!file.type.startsWith('image/')) { feedbackEl.textContent = 'Le fichier doit être une image.'; inputEl.value = ''; return; }
+  if (file.size > MAX_LOGO_BYTES) { feedbackEl.textContent = 'Image trop lourde (5 Mo max).'; inputEl.value = ''; return; }
+
+  inputEl.disabled = true;
+  feedbackEl.textContent = 'Envoi en cours…';
+  feedbackEl.style.color = '';
+
+  const path = `${org.id}/logo`;
+  const { error: upErr } = await supabase.storage.from('org-logos').upload(path, file, { upsert: true, contentType: file.type });
+  if (upErr) { feedbackEl.textContent = 'Erreur : ' + upErr.message; inputEl.disabled = false; return; }
+
+  const { data: pub } = supabase.storage.from('org-logos').getPublicUrl(path);
+  const url = `${pub.publicUrl}?v=${Date.now()}`;
+  const { error: updErr } = await supabase.from('rp_organizations').update({ logo_url: url }).eq('id', org.id);
+  if (updErr) { feedbackEl.textContent = 'Erreur : ' + updErr.message; inputEl.disabled = false; return; }
+
+  feedbackEl.style.color = 'var(--green)';
+  feedbackEl.textContent = 'Photo mise à jour !';
+  setTimeout(() => window.location.reload(), 500);
+}
+
 export async function render(container, ctx) {
   const { org, membership } = ctx;
   const admin = isAdmin(membership);
   const isOwner = membership.user_id === org.owner_id;
 
-  const { data: members } = await supabase
-    .from('rp_members')
-    .select('id, user_id, role, rp_rank, hierarchy_tier, discord_username, discord_avatar_url, joined_at')
-    .eq('org_id', org.id).eq('status', 'active')
-    .order('joined_at', { ascending: true });
+  const [{ data: members }, tiers] = await Promise.all([
+    supabase.from('rp_members')
+      .select('id, user_id, role, rp_rank, hierarchy_tier, discord_username, discord_avatar_url, joined_at')
+      .eq('org_id', org.id).eq('status', 'active')
+      .order('joined_at', { ascending: true }),
+    fetchOrgTiers(org)
+  ]);
+  const tierLabelMap = buildTierLabelMap(tiers);
+
+  const logoSectionHtml = admin ? `
+    <div class="panel-card">
+      <h2>Photo de l'organisation</h2>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        ${org.logo_url
+          ? `<img class="org-logo-preview" src="${escapeHtml(org.logo_url)}" alt="" onerror="this.style.display='none'"/>`
+          : `<div class="org-logo-preview org-logo-preview-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`}
+        <div>
+          <input type="file" id="org-logo-input" accept="image/*" style="font-size:12px;color:var(--tm)"/>
+          <div style="font-size:11px;color:var(--ts);margin-top:6px">JPG, PNG ou WebP, 5 Mo max.</div>
+        </div>
+      </div>
+      <div class="form-error" id="org-logo-error"></div>
+    </div>` : '';
+
+  const tiersSectionHtml = admin ? `
+    <div class="panel-card">
+      <h2>Grades de l'organisation</h2>
+      <p style="font-size:12px;color:var(--ts);margin-bottom:14px">Renomme, ajoute ou retire les grades RP de ton organisation. Utilisés dans le tableau des membres ci-dessous et pour cibler des quotas.</p>
+      <ul class="ingredient-list">
+        ${tiers.length === 0 ? '<li style="border:none;color:var(--ts)">Aucun grade pour l\'instant.</li>' :
+          tiers.map(t => `
+            <li>
+              <input type="text" data-tier-rename="${t.id}" value="${escapeHtml(t.label)}" maxlength="40" style="flex:1;min-width:120px;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--t);font-size:12px;padding:7px 10px"/>
+              <button data-tier-delete="${t.id}" style="background:none;border:none;color:var(--red);cursor:pointer;font-weight:900;padding:0 0 0 10px" title="Supprimer">×</button>
+            </li>`).join('')}
+      </ul>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+        <input type="text" id="new-tier-label" placeholder="Nouveau grade (ex: Capo)" maxlength="40" style="flex:1;min-width:160px;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)"/>
+        <button class="btn-primary" id="btn-add-tier" style="width:auto;padding:10px 20px">Ajouter</button>
+      </div>
+      <div class="form-error" id="tier-error"></div>
+    </div>` : '';
 
   let invitesHtml = '';
   if (admin) {
@@ -83,6 +153,8 @@ export async function render(container, ctx) {
       </div>
       <div class="form-error" id="rp-rank-error"></div>
     </div>
+    ${logoSectionHtml}
+    ${tiersSectionHtml}
     ${invitesHtml}
     <div class="panel-card">
       <h2>Membres de l'organisation (${members?.length ?? 0})</h2>
@@ -95,8 +167,8 @@ export async function render(container, ctx) {
               <td>${escapeHtml(m.rp_rank ?? '—')}</td>
               <td>${admin ? `
                 <select data-tier-select="${m.id}" style="padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--t);font-size:12px">
-                  ${Object.entries(TIER_LABELS).map(([key, label]) => `<option value="${key}" ${m.hierarchy_tier === key ? 'selected' : ''}>${label}</option>`).join('')}
-                </select>` : escapeHtml(TIER_LABELS[m.hierarchy_tier] ?? m.hierarchy_tier)}</td>
+                  ${tiers.map(t => `<option value="${escapeHtml(t.key)}" ${m.hierarchy_tier === t.key ? 'selected' : ''}>${escapeHtml(t.label)}</option>`).join('')}
+                </select>` : escapeHtml(tierLabelMap[m.hierarchy_tier] ?? m.hierarchy_tier)}</td>
               <td><span class="pill ${m.role === 'owner' || m.role === 'admin' ? 'green' : ''}">${m.user_id === org.owner_id ? 'owner' : m.role}</span></td>
               <td>${new Date(m.joined_at).toLocaleDateString('fr-FR')}</td>
               ${admin ? `<td>${renderMemberActions(m, org, membership)}</td>` : ''}
@@ -123,6 +195,50 @@ export async function render(container, ctx) {
   });
 
   if (admin) {
+    document.getElementById('org-logo-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleLogoUpload(file, org, document.getElementById('org-logo-error'), e.target);
+    });
+
+    container.querySelectorAll('[data-tier-rename]').forEach(input => {
+      input.addEventListener('blur', async () => {
+        const label = input.value.trim();
+        const tierId = input.dataset.tierRename;
+        const original = tiers.find(t => t.id === tierId);
+        if (!label || label === original?.label) { input.value = original?.label ?? ''; return; }
+        const { error } = await supabase.from('rp_org_tiers').update({ label }).eq('id', tierId);
+        if (error) { alert('Erreur : ' + error.message); input.value = original?.label ?? ''; return; }
+        render(container, ctx);
+      });
+    });
+
+    container.querySelectorAll('[data-tier-delete]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Supprimer ce grade ? Les membres et quotas qui le ciblent actuellement garderont ce nom affiché tel quel — il ne se mettra plus à jour automatiquement.')) return;
+        const { error } = await supabase.from('rp_org_tiers').delete().eq('id', btn.dataset.tierDelete);
+        if (error) { alert('Erreur : ' + error.message); return; }
+        render(container, ctx);
+      });
+    });
+
+    document.getElementById('btn-add-tier').addEventListener('click', async () => {
+      const label = document.getElementById('new-tier-label').value.trim();
+      const err = document.getElementById('tier-error');
+      err.textContent = '';
+      if (!label) { err.textContent = 'Donne un nom au grade.'; return; }
+      const baseKey = slugifyTierKey(label);
+      const maxSort = tiers.reduce((m, t) => Math.max(m, t.sort_order), -1);
+      let lastError = null;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const key = attempt === 0 ? baseKey : `${baseKey}_${attempt + 1}`;
+        const { error } = await supabase.from('rp_org_tiers').insert({ org_id: org.id, key, label, sort_order: maxSort + 1 });
+        if (!error) { render(container, ctx); return; }
+        lastError = error;
+        if (error.code !== '23505') break; // pas une collision de clé → inutile de réessayer
+      }
+      err.textContent = 'Erreur : ' + (lastError?.message ?? 'inconnue');
+    });
+
     document.getElementById('btn-new-invite').addEventListener('click', async (e) => {
       const btn = e.target;
       btn.disabled = true; btn.textContent = 'Génération…';

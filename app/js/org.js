@@ -1,4 +1,5 @@
 import { supabase } from './supabase-client.js';
+import { escapeHtml } from './format.js';
 
 const STORAGE_KEY = 'ekippp_groupe_current_org';
 
@@ -10,7 +11,7 @@ const STORAGE_KEY = 'ekippp_groupe_current_org';
 export async function fetchMyMemberships(userId) {
   const { data, error } = await supabase
     .from('rp_members')
-    .select('id, org_id, user_id, role, rp_rank, discord_username, discord_avatar_url, rp_organizations(id, name, slug, timezone, accent_color, is_active, owner_id)')
+    .select('id, org_id, user_id, role, rp_rank, discord_username, discord_avatar_url, rp_organizations(id, name, slug, timezone, accent_color, is_active, owner_id, logo_url, tiers_seeded)')
     .eq('status', 'active')
     .eq('user_id', userId);
   if (error) throw error;
@@ -38,4 +39,13 @@ export function resolveCurrentMembership(memberships) {
 
 export function isAdmin(membership) {
   return membership && (membership.role === 'owner' || membership.role === 'admin');
+}
+
+// Factorisé pour être réutilisable au rendu initial de la sidebar (app-boot.js) ET pour un
+// patch en direct de ce même avatar quand la photo change côté Realtime (realtime.js) —
+// sans ça, un membre déjà connecté ne voit la nouvelle photo qu'après un rechargement.
+export function buildOrgAvatarHtml(org) {
+  return org.logo_url
+    ? `<img class="org-avatar" src="${escapeHtml(org.logo_url)}" alt="" onerror="this.style.display='none'"/>`
+    : `<div class="org-avatar org-avatar-fallback">${escapeHtml((org.name || '?').trim().charAt(0).toUpperCase())}</div>`;
 }

@@ -2,7 +2,7 @@ import { supabase } from './supabase-client.js';
 import { isAdmin } from './org.js';
 import { todayInTz, fmtDateLabel, shiftDate, isHourPast } from './date-utils.js';
 import { fetchOrgMembers, buildNameMap } from './members.js';
-import { escapeHtml } from './format.js';
+import { escapeHtml, formatMoney } from './format.js';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const STATE_LABELS = { disponible: 'Disponible', pris: 'Pris', a_declarer: 'À déclarer', realise: 'Réalisé', perte: 'Perte' };
@@ -65,7 +65,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
     const [{ data: slots }, { data: ingredients }, { data: history }, orgMembers] = await Promise.all([
       supabase.from('rp_lab_slots').select('id, slot_hour, state, claimed_by, batch_yield')
         .eq('lab_id', lab.id).eq('slot_date', state.currentDate),
-      supabase.from('rp_lab_ingredients').select('id, item_name, quantity, unit').eq('lab_id', lab.id).order('sort_order'),
+      supabase.from('rp_lab_ingredients').select('id, item_name, quantity, unit, unit_price').eq('lab_id', lab.id).order('sort_order'),
       supabase.from('rp_production_log').select('quantity, unit, produced_at, member_id')
         .eq('lab_id', lab.id).order('produced_at', { ascending: false }).limit(15),
       fetchOrgMembers(state.org.id)
@@ -106,7 +106,7 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
         <div class="day-label">${fmtDateLabel(state.currentDate)}</div>
         <button id="btn-next-day">→</button>
       </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+      <div class="lab-layout">
         <div>
           <div class="slot-grid">${gridHtml}</div>
         </div>
@@ -114,12 +114,22 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
           <h2>${recipeCardTitle} — ${escapeHtml(lab.name)}</h2>
           <ul class="ingredient-list">
             ${(ingredients ?? []).length === 0 ? '<li style="border:none;color:var(--ts)">Rien de renseigné.</li>' :
-              ingredients.map(i => `<li><span>${escapeHtml(i.item_name)}</span><span>${i.quantity} ${escapeHtml(i.unit)}${state.admin ? ` <button data-delete-ing="${i.id}" style="background:none;border:none;color:var(--red);cursor:pointer;font-weight:900;padding:0 0 0 8px" title="Supprimer">×</button>` : ''}</span></li>`).join('')}
+              ingredients.map(i => {
+                const lineCost = i.unit_price != null ? Number(i.unit_price) * Number(i.quantity) : null;
+                const qtyLabel = `${i.quantity} ${escapeHtml(i.unit ?? '')}`.trim();
+                const costLabel = lineCost != null ? ` — ${formatMoney(lineCost)}` : '';
+                return `<li><span>${escapeHtml(i.item_name)}</span><span>${qtyLabel}${costLabel}${state.admin ? ` <button data-delete-ing="${i.id}" style="background:none;border:none;color:var(--red);cursor:pointer;font-weight:900;padding:0 0 0 8px" title="Supprimer">×</button>` : ''}</span></li>`;
+              }).join('')}
           </ul>
+          ${(() => {
+            const total = (ingredients ?? []).reduce((sum, i) => sum + (i.unit_price != null ? Number(i.unit_price) * Number(i.quantity) : 0), 0);
+            return total > 0 ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:13px;font-weight:800">Coût total : ${formatMoney(total)}</div>` : '';
+          })()}
           ${state.admin ? `
             <div class="field" style="margin-top:14px"><input type="text" id="ing-name" placeholder="Élément"/></div>
-            <div style="display:flex;gap:8px">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
               <input type="number" id="ing-qty" placeholder="Qté" style="width:80px;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)"/>
+              <input type="number" id="ing-price" placeholder="Prix unit. ($)" style="width:110px;padding:11px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--t)"/>
               <button class="btn-primary" id="btn-add-ing" style="width:auto;padding:10px 16px">Ajouter</button>
             </div>` : ''}
           ${state.admin ? `<button class="btn-ghost" id="btn-delete-lab" style="width:auto;padding:8px 16px;margin-top:14px;color:var(--red);border-color:rgba(239,68,68,.3)">Supprimer « ${escapeHtml(lab.name)} »</button>` : ''}
@@ -152,7 +162,10 @@ export function createLabPanel({ category, title, subtitle, createHeading, creat
         const name = document.getElementById('ing-name').value.trim();
         const qty = parseFloat(document.getElementById('ing-qty').value);
         if (!name || isNaN(qty)) return;
-        await supabase.from('rp_lab_ingredients').insert({ lab_id: lab.id, item_name: name, quantity: qty });
+        const priceRaw = document.getElementById('ing-price').value;
+        const unitPrice = priceRaw === '' ? null : parseFloat(priceRaw);
+        if (unitPrice !== null && (isNaN(unitPrice) || unitPrice < 0)) return;
+        await supabase.from('rp_lab_ingredients').insert({ lab_id: lab.id, item_name: name, quantity: qty, unit_price: unitPrice });
         renderFull(container, ctx);
       });
     }
